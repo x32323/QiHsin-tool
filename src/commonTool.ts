@@ -5,7 +5,7 @@ function sleep(ms = 1000) {
 }
 
 function random(min = 0, max = 100) {
-    let rand = Math.random()
+    let rand = Math.random();
     return Math.floor(rand * Number(max) - Number(min)) + Number(min);
 };
 
@@ -20,9 +20,8 @@ function readdir(dir:string) {
 
 async function read(dir:string) { 
     fs.readFile(dir, (err, data) => {
-        if (err) {
-            throw(err)
-        } else {
+        if (err) {throw(err)} 
+        else {
             if (_isJsonString(data)) {
                 return JSON.parse(data.toString());
             } else {
@@ -40,13 +39,17 @@ function write(dir:string, data:any) {
         writeData = data;
     }
     fs.writeFile(dir, writeData, function (err) {
-        if (err) {
-            throw(err)
-        }
+        if (err) {throw(err)}
         else {
             return('<Write operation complete>')
         }
     })
+}
+
+function exist(dir:string){ //官方不推薦使用
+    fs.exists(dir, function(isExist) {
+        return isExist;
+    });
 }
 
 function _isJsonString(str:any) {
@@ -54,15 +57,18 @@ function _isJsonString(str:any) {
         if (typeof JSON.parse(str) == "object") {
             return true;
         }
-    } catch(e) {throw e}
+    } catch(err) {throw err}
     return false;
 }
 
-export default {
+const output = {
     "sleep": sleep,
     "random": random,
     "write": write,
     "read": read,
     "readdir":readdir
 }
+
+//module.exports = output;
+export default output;
 
